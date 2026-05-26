@@ -35,7 +35,7 @@ body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-s
 .tag { display: inline-block; background: rgba(0,0,0,.4); border: 1px solid rgba(255,255,255,.15); border-radius: 50px; font-size: 10px; color: rgba(255,255,255,.8); padding: 3px 9px; }
 
 /* Currently reading */
-.cr-card { position: relative; border-radius: var(--rlg); overflow: hidden; margin-bottom: 12px; min-height: 160px; cursor: pointer; background: var(--bg); }
+.cr-card { position: relative; border-radius: var(--rlg); overflow: hidden; margin-bottom: 12px; min-height: 160px; cursor: pointer; transform: translateZ(0); }
 .cr-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
 .cr-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,.92) 0%, rgba(0,0,0,.5) 55%, rgba(0,0,0,.1) 100%); }
 .cr-body { position: relative; z-index: 2; padding: 16px; display: flex; flex-direction: column; justify-content: flex-end; min-height: 160px; }
@@ -892,7 +892,10 @@ function renderShelf() {
   const bar = make('div', { cls: 'shelf-bar' });
   bar.appendChild(make('div', { cls: 'shelf-fill', style: `width:${pct}%` }));
   wrap.appendChild(bar);
-  wrap.appendChild(make('div', { cls: 'shelf-sub', text: 'Curated with care. Now start reading.' }));
+  const subText = read > 0
+    ? `${read} of ${total} books read · ${pct}%`
+    : 'Curated with care. Now start reading.';
+  wrap.appendChild(make('div', { cls: 'shelf-sub', text: subText }));
 }
 
 function renderCollectionStats() {
@@ -921,7 +924,7 @@ function renderReceipts() {
   }
 
   const pages    = readBooks.reduce((s, b) => { const p = getBookMeta(b.id).pageCount || b.pageCount; return s + (p > 0 ? p : 300); }, 0);
-  const hours    = Math.round(pages / 250);
+  const hours    = Math.round(pages / 25);
   const thisYear = String(new Date().getFullYear());
   const yearRead = readBooks.filter(b => b.dateRead?.slice(0,4) === thisYear).length;
   const total    = db.books.length;
