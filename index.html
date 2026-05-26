@@ -35,13 +35,18 @@ body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-s
 .tag { display: inline-block; background: rgba(0,0,0,.4); border: 1px solid rgba(255,255,255,.15); border-radius: 50px; font-size: 10px; color: rgba(255,255,255,.8); padding: 3px 9px; }
 
 /* Currently reading */
-.cr-card { position: relative; border-radius: var(--rlg); overflow: hidden; margin-bottom: 12px; min-height: 160px; cursor: pointer; background: var(--bg3); }
+.cr-card { position: relative; border-radius: var(--rlg); overflow: hidden; margin-bottom: 12px; min-height: 160px; cursor: pointer; background: var(--bg); }
 .cr-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
 .cr-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,.92) 0%, rgba(0,0,0,.5) 55%, rgba(0,0,0,.1) 100%); }
 .cr-body { position: relative; z-index: 2; padding: 16px; display: flex; flex-direction: column; justify-content: flex-end; min-height: 160px; }
-.cr-badge { font-size: 10px; font-weight: 600; color: var(--green); letter-spacing: .8px; text-transform: uppercase; margin-bottom: 6px; }
 .cr-title { font-size: 18px; font-weight: 700; line-height: 1.2; margin-bottom: 3px; }
 .cr-author { font-size: 13px; color: rgba(255,255,255,.7); }
+.cr-desc { font-size: 11px; color: rgba(255,255,255,.55); line-height: 1.5; margin-top: 6px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.dice-btn { position: absolute; top: 12px; right: 12px; z-index: 3; background: rgba(0,0,0,.5); border: none; border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #fff; padding: 0; transition: background .15s; }
+.dice-btn:hover { background: rgba(0,0,0,.7); }
+.dice-btn svg { width: 18px; height: 18px; }
+.dice-btn.spin svg { animation: dice-spin .4s ease; }
+@keyframes dice-spin { 0% { transform: rotate(0deg) scale(1); } 50% { transform: rotate(180deg) scale(1.4); } 100% { transform: rotate(360deg) scale(1); } }
 
 /* Shelf */
 .shelf-wrap { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--rlg); padding: 16px; margin-bottom: 12px; }
@@ -205,15 +210,15 @@ option { background: var(--bg3); }
     <button class="signout-btn" id="signout-btn">Sign out</button>
   </div>
   <div class="page-sub" id="home-date"></div>
-  <div class="sec-label">In progress</div>
+  <div class="sec-label">Reading</div>
   <div id="cr-wrap"></div>
-  <div class="sec-label">The shelf</div>
+  <div class="sec-label">Shelf</div>
   <div class="shelf-wrap" id="shelf-wrap"></div>
   <div class="sec-label">Collection</div>
   <div class="stats-row" id="stats-row"></div>
-  <div class="sec-label">The receipts</div>
+  <div class="sec-label">Receipts</div>
   <div class="real-stats" id="real-stats"></div>
-  <div class="sec-label" id="next-label">Stop scrolling. Read this.</div>
+  <div class="sec-label" id="next-label">Gamble</div>
   <div id="next-wrap"></div>
   <div class="sec-label">Genre breakdown</div>
   <div class="card" id="genre-wrap"></div>
@@ -807,7 +812,6 @@ function renderCR() {
     const overlay = make('div', { cls: 'cr-overlay' });
     const body    = make('div', { cls: 'cr-body' });
     on(card, 'click', () => openBookModal(b.id));
-    body.appendChild(make('div', { cls: 'cr-badge', text: 'Now reading' }));
     body.appendChild(make('div', { cls: 'cr-title', text: b.title }));
     body.appendChild(make('div', { cls: 'cr-author', text: b.author }));
     const tw = make('div', { style: 'margin-top:8px' });
@@ -888,7 +892,7 @@ function renderShelf() {
   const bar = make('div', { cls: 'shelf-bar' });
   bar.appendChild(make('div', { cls: 'shelf-fill', style: `width:${pct}%` }));
   wrap.appendChild(bar);
-  wrap.appendChild(make('div', { cls: 'shelf-sub', text: 'Curated with care. Read with... lol nvm.' }));
+  wrap.appendChild(make('div', { cls: 'shelf-sub', text: 'Curated with care. Now start reading.' }));
 }
 
 function renderCollectionStats() {
@@ -940,6 +944,8 @@ function renderNextRead() {
   clear('next-wrap');
   const unread = db.books.filter(b => b.status === 'unread');
 
+  labelEl.textContent = 'Gamble';
+
   if (!unread.length) {
     byId('next-wrap').appendChild(make('div', { cls: 'card', style: 'color:var(--text2);font-size:13px',
       text: 'You read everything. Did not think this day would come.' }));
@@ -947,23 +953,48 @@ function renderNextRead() {
   }
 
   if (!db.nextPick) pickNext(unread);
-  const b = db.nextPick;
+  const b    = db.nextPick;
+  const meta = getBookMeta(b.id);
 
-  labelEl.textContent = '';
-  labelEl.appendChild(make('span', { text: 'Stop scrolling. Read this.' }));
-  const shuf = make('button', { cls: 'btn-ghost', text: 'Not feeling it' });
-  shuf.addEventListener('click', () => { db.nextPick = null; pickNext(unread); renderNextRead(); });
-  labelEl.appendChild(shuf);
+  const card    = make('div', { cls: 'cr-card' });
+  const overlay = make('div', { cls: 'cr-overlay' });
+  const body    = make('div', { cls: 'cr-body' });
 
-  const card = make('div', { cls: 'next-card' });
-  const row  = make('div', { cls: 'next-row' });
-  row.appendChild(coverEl(b, 64, 96));
-  const info = make('div', { style: 'flex:1;min-width:0' });
-  info.appendChild(make('div', { style: 'font-size:15px;font-weight:600;line-height:1.3;margin-bottom:4px', text: b.title }));
-  info.appendChild(make('div', { style: 'font-size:12px;color:var(--text2);margin-bottom:10px', text: b.author }));
-  info.appendChild(make('span', { cls: 'tag', text: b.genre }));
-  row.appendChild(info);
-  card.appendChild(row);
+  const diceBtn = make('button', { cls: 'dice-btn' });
+  diceBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="3"/><circle cx="7" cy="7" r="1.3" fill="currentColor" stroke="none"/><circle cx="17" cy="7" r="1.3" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.3" fill="currentColor" stroke="none"/><circle cx="7" cy="17" r="1.3" fill="currentColor" stroke="none"/><circle cx="17" cy="17" r="1.3" fill="currentColor" stroke="none"/></svg>`;
+  diceBtn.addEventListener('click', e => {
+    e.stopPropagation();
+    diceBtn.classList.add('spin');
+    diceBtn.addEventListener('animationend', () => {
+      diceBtn.classList.remove('spin');
+      db.nextPick = null;
+      pickNext(unread);
+      renderNextRead();
+    }, { once: true });
+  });
+
+  body.appendChild(make('div', { cls: 'cr-title', text: b.title }));
+  body.appendChild(make('div', { cls: 'cr-author', text: b.author }));
+  if (meta.description) body.appendChild(make('div', { cls: 'cr-desc', text: meta.description }));
+  const tw = make('div', { style: 'margin-top:8px' });
+  tw.appendChild(make('span', { cls: 'tag', text: b.genre }));
+  body.appendChild(tw);
+
+  card.appendChild(overlay);
+  card.appendChild(diceBtn);
+  card.appendChild(body);
+  on(card, 'click', () => openBookModal(b.id));
+
+  const coverUrl = meta.coverUrl;
+  if (coverUrl) {
+    const img = make('img', { cls: 'cr-bg' });
+    img.src = coverUrl; img.alt = b.title;
+    img.onerror = () => { img.remove(); card.style.background = COLORS[b.id % COLORS.length]; };
+    card.insertBefore(img, card.firstChild);
+  } else {
+    card.style.background = COLORS[b.id % COLORS.length];
+  }
+
   byId('next-wrap').appendChild(card);
 }
 
