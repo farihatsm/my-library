@@ -35,7 +35,7 @@ body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-s
 .tag { display: inline-block; background: rgba(0,0,0,.4); border: 1px solid rgba(255,255,255,.15); border-radius: 50px; font-size: 10px; color: rgba(255,255,255,.8); padding: 3px 9px; }
 
 /* Currently reading */
-.cr-card { position: relative; border-radius: var(--rlg) var(--rlg) 0 0; overflow: hidden; margin-bottom: 12px; min-height: 160px; cursor: pointer; transform: translateZ(0); }
+.cr-card { position: relative; border-radius: var(--rlg); overflow: hidden; margin-bottom: 12px; min-height: 160px; cursor: pointer; transform: translateZ(0); box-shadow: 0 0 0 2px var(--bg); }
 .cr-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
 .cr-overlay { position: absolute; inset: 0; background: linear-gradient(to top, var(--bg) 0%, rgba(0,0,0,.5) 55%, rgba(0,0,0,.1) 100%); }
 .cr-body { position: relative; z-index: 2; padding: 16px; display: flex; flex-direction: column; justify-content: flex-end; min-height: 160px; }
