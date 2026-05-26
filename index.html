@@ -1083,8 +1083,8 @@ function bookCard(b) {
   } else {
     applyPh();
     if (coverObserver) {
-      inner._onVisible = () => enqueue(() => fetchBook(b).then(d => { if (d.url && inner.isConnected) applyImg(d.url); }));
-      coverObserver.observe(inner);
+      card._onVisible = () => enqueue(() => fetchBook(b).then(d => { if (d.url && inner.isConnected) applyImg(d.url); }));
+      coverObserver.observe(card);
     } else {
       fetchBook(b).then(d => { if (d.url && inner.isConnected) applyImg(d.url); });
     }
