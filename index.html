@@ -457,6 +457,17 @@ var db = {
   camData: null
 };
 
+var coverObserver = typeof IntersectionObserver !== 'undefined'
+  ? new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        coverObserver.unobserve(entry.target);
+        var fn = entry.target._onVisible;
+        if (fn) { entry.target._onVisible = null; fn(); }
+      });
+    }, { rootMargin: '80px' })
+  : null;
+
 // ── PERSISTENCE ───────────────────────────────────────────────────────────────
 function dbLoad() {
   try {
@@ -596,7 +607,12 @@ function coverEl(book, w, h) {
   if (cached) { if (cached.url) showImg(cached.url); else wrap.appendChild(showPh()); }
   else {
     wrap.appendChild(showPh());
-    fetchBook(book).then(function (data) { if (data.url && wrap.isConnected) showImg(data.url); });
+    if (coverObserver) {
+      wrap._onVisible = function () { fetchBook(book).then(function (data) { if (data.url && wrap.isConnected) showImg(data.url); }); };
+      coverObserver.observe(wrap);
+    } else {
+      fetchBook(book).then(function (data) { if (data.url && wrap.isConnected) showImg(data.url); });
+    }
   }
   return wrap;
 }
@@ -942,7 +958,15 @@ function bookCard(b) {
 
   var cached = db.covers[b.id];
   if (cached) { if (cached.url) applyImg(cached.url); else applyPh(); }
-  else { applyPh(); fetchBook(b).then(function (d) { if (d.url && inner.isConnected) applyImg(d.url); }); }
+  else {
+    applyPh();
+    if (coverObserver) {
+      inner._onVisible = function () { fetchBook(b).then(function (d) { if (d.url && inner.isConnected) applyImg(d.url); }); };
+      coverObserver.observe(inner);
+    } else {
+      fetchBook(b).then(function (d) { if (d.url && inner.isConnected) applyImg(d.url); });
+    }
+  }
 
   card.appendChild(inner);
   return card;
