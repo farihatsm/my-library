@@ -1082,12 +1082,7 @@ function bookCard(b) {
     if (cached.url) applyImg(cached.url); else applyPh();
   } else {
     applyPh();
-    if (coverObserver) {
-      card._onVisible = () => enqueue(() => fetchBook(b).then(d => { if (d.url && inner.isConnected) applyImg(d.url); }));
-      coverObserver.observe(card);
-    } else {
-      fetchBook(b).then(d => { if (d.url && inner.isConnected) applyImg(d.url); });
-    }
+    enqueue(() => fetchBook(b).then(d => { if (d.url && inner.isConnected) applyImg(d.url); }));
   }
 
   card.appendChild(inner);
