@@ -352,8 +352,119 @@ const auth        = getAuth(firebaseApp);
 const firestore   = getFirestore(firebaseApp);
 
 // ── CONSTANTS ─────────────────────────────────────────────────────────────────
-const COVERS_KEY = 'mylib_covers';
 const COLORS = ['#e05c5c','#5c8ae0','#5ca87a','#c9a96e','#a05ce0','#e08a5c','#5ce0d4','#e05ca8','#8ae05c','#5c6ae0','#e0c85c','#5cb8e0'];
+const BOOK_DATA = [
+  {"id":1,"coverUrl":"https://books.google.com/books/content?id=ibvbDwAAQBAJ&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":384,"publishYear":"2020","description":"The timeless Pulitzer Prize–winning masterpiece following a humble farmer’s journey through 1920s China returns with this beautifully repackaged edition that celebrates its nearly ninety years as an American classic."},
+  {"id":2,"coverUrl":"https://books.google.com/books/content?id=1HcrcBoexk4C&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":445,"publishYear":"1997","description":"\"Captivating, minutely imagined . . . a novel that refuses to stay shut\" (\"Newsweek\"), \"Memoirs of a Geisha\" is now released in a movie tie-in edition."},
+  {"id":3,"coverUrl":"https://books.google.com/books/content?id=XG3JcNXdgQwC&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":500,"publishYear":"2019","description":"After spending years in California, Amir returns to his homeland in Afghanistan to help his old friend Hassan, whose son is in trouble."},
+  {"id":4,"coverUrl":"https://books.google.com/books/content?id=3vo0NQbIN2YC&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":380,"publishYear":"2008","description":"A riveting and powerful story of an unforgiving time, an unlikely friendship and an indestructible love"},
+  {"id":5,"coverUrl":"https://books.google.com/books/content?id=TazgEAAAQBAJ&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":581,"publishYear":"2024","description":"From legendary storyteller and master of short fiction Stephen King, an extraordinary collection of stories that are a master class in tension and full of King’s dark humor."},
+  {"id":6,"coverUrl":"https://books.google.com/books/content?id=WzjOjwEACAAJ&printsec=frontcover&img=1&zoom=3&source=gbs_api","pageCount":0,"publishYear":"2016","description":"Anne of Green Gables is a 1908 novel by Canadian author Lucy Maud Montgomery. It recounts the adventures of Anne Shirley, an 11-year-old orphan girl who is mistakenly sent to Matthew and Marilla Cuthbert."},
+  {"id":7,"coverUrl":"https://books.google.com/books/content?id=HD7TCwAAQBAJ&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":290,"publishYear":"2015","description":"Park has told the harrowing story of her escape from North Korea as a child many times, but never before has she revealed the most intimate and devastating details of the repressive society she was raised in."},
+  {"id":8,"coverUrl":"https://books.google.com/books/content?id=80MyDwAAQBAJ&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":528,"publishYear":"2017","description":"An astonishing novel about redemption and forgiveness from #1 New York Times-bestselling author Picoult. Sage Singer becomes friends with an old man who’s particularly beloved in her community. One day he asks Sage for a favor: to kill him."},
+  {"id":9,"coverUrl":"https://books.google.com/books/content?id=ikyMEAAAQBAJ&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":369,"publishYear":"2023","description":"An overworked book publicist with a perfectly planned future hits a snag when she falls in love with her temporary roommate… only to discover he lives seven years in the past, in this witty and wise novel from the New York Times bestselling author of The Dead Romantics."},
+  {"id":10,"coverUrl":"https://books.google.com/books/content?id=vP9bDwAAQBAJ&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":477,"publishYear":"2019","description":"From the bestselling author of Truths I Never Told You, Kelly Rimmer’s powerful WWII novel follows a woman’s urgent search for answers to a family mystery that uncovers truths about herself that she never expected."},
+  {"id":11,"coverUrl":"https://books.google.com/books/content?id=T_EXEQAAQBAJ&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":448,"publishYear":"2025","description":"#1 New York Times bestselling author Fredrik Backman returns with an unforgettably funny, deeply moving tale of four teenagers whose friendship creates a bond so powerful that it changes a stranger’s life twenty-five years later."},
+  {"id":12,"coverUrl":"https://books.google.com/books/content?id=uNMjeFMorPgC&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":370,"publishYear":"2013","description":"#1 NEW YORK TIMES BESTSELLER • Experience the book that started the Quiet Movement and revolutionized how the world sees introverts—and how introverts see themselves—by offering validation, inclusion, and inspiration."},
+  {"id":13,"coverUrl":"https://books.google.com/books/content?id=Gyr5EAAAQBAJ&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":465,"publishYear":"2024","description":"From the critically acclaimed author of Girl in Pieces comes a raw, heart-wrenching novel about a teenager facing down her struggles with alcohol—and the journey she must take to heal."},
+  {"id":14,"coverUrl":"https://books.google.com/books/content?id=5DYtEQAAQBAJ&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":608,"publishYear":"2024","description":"Thad, a college professor who moonlights as a writer of pop thrillers under the pseudonym George Stark, finally writes a serious novel and decides to stop writing shockers. But George Stark has come to life and doesn’t want to die."},
+  {"id":15,"coverUrl":"https://books.google.com/books/content?id=3t5dtAEACAAJ&printsec=frontcover&img=1&zoom=3&source=gbs_api","pageCount":376,"publishYear":"1982","description":"The unforgettable novel of a childhood in a sleepy Southern town and the crisis of conscience that rocked it, in a mass market edition."},
+  {"id":16,"coverUrl":"https://books.google.com/books/content?id=ck-a0QEACAAJ&printsec=frontcover&img=1&zoom=3&source=gbs_api","pageCount":0,"publishYear":"2026","description":"A simple DNA test is all it takes. A thrilling speculative novel — how far would you go to find The One?"},
+  {"id":17,"coverUrl":"https://books.google.com/books/content?id=GODUCwAAQBAJ&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":277,"publishYear":"2016","description":"#1 NEW YORK TIMES BESTSELLER • A brilliant, poignant, soul-nourishing memoir about coming of age during the twilight of apartheid."},
+  {"id":18,"coverUrl":"https://books.google.com/books/content?id=vB4GEQAAQBAJ&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":217,"publishYear":"2025","description":"With humour, warmth and heartbreaking honesty, award-winning author David A. Robertson explores the struggles and small victories of living with chronic anxiety and depression."},
+  {"id":19,"coverUrl":"https://books.google.com/books/content?id=gIy10AEACAAJ&printsec=frontcover&img=1&zoom=3&source=gbs_api","pageCount":0,"publishYear":"2025","description":"The instant NYT bestseller featuring Will Trent and Sara Linton. One toxic family. Eight suspicious guests. Everyone is guilty."},
+  {"id":20,"coverUrl":"https://books.google.com/books/content?id=x8NmDwAAQBAJ&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":406,"publishYear":"2018","description":null},
+  {"id":21,"coverUrl":"https://books.google.com/books/content?id=s1gVAAAAYAAJ&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":448,"publishYear":"1918","description":"Austen’s most celebrated novel tells the story of Elizabeth Bennet, a bright, lively young woman with four sisters, and a mother determined to marry them to wealthy men."},
+  {"id":22,"coverUrl":"https://books.google.com/books/content?id=c0oYEQAAQBAJ&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":401,"publishYear":"2025","description":"#1 NATIONAL BESTSELLER • A radiant, new escape to the lake from #1 New York Times bestselling author Carley Fortune."},
+  {"id":23,"coverUrl":"https://books.google.com/books/content?id=BriKEQAAQBAJ&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":402,"publishYear":"2025","description":"Virginia Roberts Giuffre is known as the victim of Jeffrey Epstein and Ghislaine Maxwell who, after years of repeated abuse, decided to speak her truth and contributed to the conviction of both."},
+  {"id":24,"coverUrl":"https://books.google.com/books/content?id=taumEAAAQBAJ&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":400,"publishYear":"2023","description":"This #1 international bestseller follows three women bound together by a long-lost letter, a mother’s love, and a secret network of women fighting for the right to choose—inspired by true stories."},
+  {"id":25,"coverUrl":"https://books.google.com/books/content?id=VswAEAAAQBAJ&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":451,"publishYear":"2020","description":"The tantalising start to a seductive fantasy series from global #1 bestselling author Sarah J. Maas."},
+  {"id":26,"coverUrl":"https://books.google.com/books/content?id=OdXvDwAAQBAJ&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":788,"publishYear":"2021","description":"Sarah J. Maas’s sexy, richly imagined series continues with the journey of Feyre’s fiery sister, Nesta."},
+  {"id":27,"coverUrl":"https://books.google.com/books/content?id=pLL-DAAAQBAJ&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":738,"publishYear":"2017","description":"The epic third novel in the #1 bestselling Court of Thorns and Roses series by global phenomenon Sarah J. Maas."},
+  {"id":28,"coverUrl":"https://books.google.com/books/content?id=zcis0QEACAAJ&printsec=frontcover&img=1&zoom=3&source=gbs_api","pageCount":0,"publishYear":"2026","description":"Viola Davis and James Patterson have written an incredible courtroom drama and created the most unforgettable character in years. All rise… for Judge Stone."},
+  {"id":29,"coverUrl":"https://books.google.com/books/content?id=_CqczgEACAAJ&printsec=frontcover&img=1&zoom=3&source=gbs_api","pageCount":0,"publishYear":"2022","description":"Matthew Keating, a one-time Navy SEAL and former US President, has always defended his family as fiercely as he has his country. Now his teenage daughter has been abducted."},
+  {"id":30,"coverUrl":"https://books.google.com/books/content?id=-Ff2DwAAQBAJ&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":497,"publishYear":"2021","description":"THE #1 NEW YORK TIMES BESTSELLER • A lone astronaut must save the earth from disaster in this propulsive, cinematic thriller full of suspense, humor, and fascinating science."},
+  {"id":31,"coverUrl":null,"pageCount":0,"publishYear":"2025","description":null},
+  {"id":32,"coverUrl":"https://books.google.com/books/content?id=xmOPEQAAQBAJ&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":400,"publishYear":"2025","description":"One spring morning, a stranger arrives in the small southern city of Golden. His name is Theo. And he asks a lot more questions than he answers."},
+  {"id":33,"coverUrl":"https://books.google.com/books/content?id=fpoc0QEACAAJ&printsec=frontcover&img=1&zoom=3&source=gbs_api","pageCount":0,"publishYear":"2026","description":"Freya Lockwood and Aunt Carole are back in a race against time set in the haunting Scottish countryside. The heart-pounding third instalment in this cosy crime series."},
+  {"id":34,"coverUrl":"https://books.google.com/books/content?id=07onEQAAQBAJ&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":305,"publishYear":"2025","description":"From the world’s #1 bestselling author and former president of the United States — America has a powerful new president… and her husband’s on trial for murder."},
+  {"id":35,"coverUrl":"https://books.google.com/books/content?id=nQiMEQAAQBAJ&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":381,"publishYear":"2026","description":"Ten heists. Ten suspects. A murder mystery only Ernest Cunningham can solve — perfect for fans of Richard Osman and Anthony Horowitz."},
+  {"id":36,"coverUrl":"https://books.google.com/books/content?id=_atpEQAAQBAJ&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":657,"publishYear":"2026","description":"A bold, bighearted, and riotously funny novel about a sisterhood of unbreakable women who risk everything to take control of their fates. Oxford, Mississippi, 1933."},
+  {"id":37,"coverUrl":"https://books.google.com/books/content?id=fn20CwAAQBAJ&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":497,"publishYear":"2016","description":"A beautifully transporting novel about a man who is ordered to spend the rest of his life inside a luxury hotel. In 1922, Count Alexander Rostov is deemed an unrepentant aristocrat by a Bolshevik tribunal."},
+  {"id":38,"coverUrl":"https://books.google.com/books/content?id=JZwpDwAAQBAJ&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":405,"publishYear":"2018","description":"Tara Westover was seventeen when she first set foot in a classroom. Instead of traditional lessons, she grew up learning how to stew herbs into medicine and scavenging in the family scrap yard."},
+  {"id":39,"coverUrl":"https://books.google.com/books/content?id=yyWlEAAAQBAJ&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":257,"publishYear":"2023","description":"From the indie rock sensation known as Japanese Breakfast, an unforgettable memoir about family, food, grief, love, and growing up Korean American."},
+  {"id":40,"coverUrl":"https://books.google.com/books/content?id=YjAnfhsAQ8wC&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":561,"publishYear":"2004","description":"THE #1 NATIONAL BESTSELLER • One of the world’s most beloved writers takes his ultimate journey—into the most intriguing and intractable questions that science seeks to answer."},
+  {"id":41,"coverUrl":"https://books.google.com/books/content?id=MgNLDwAAQBAJ&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":661,"publishYear":"2017","description":"Based on more than 500 interviews including Muhammad Ali’s closest associates, and enhanced by access to thousands of pages of newly released FBI records."},
+  {"id":42,"coverUrl":"https://books.google.com/books/content?id=-jFl68uKkqUC&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":402,"publishYear":"2004","description":"An unspeakable act has ripped apart the idyllic town of Bakersville, Oregon. Officer Rainie Conner, leading her first homicide investigation, stands at the center of the controversy."},
+  {"id":43,"coverUrl":"https://books.google.com/books/content?id=jIdLAQAAIAAJ&printsec=frontcover&img=1&zoom=3&source=gbs_api","pageCount":0,"publishYear":"1987","description":null},
+  {"id":44,"coverUrl":"https://books.google.com/books/content?id=yrJFEAAAQBAJ&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":515,"publishYear":"2021","description":"Billy Summers is a hitman with a heart — and the best in the business. Now he wants out. It’s just one last job. A story of love and revenge, and one dubious hero’s attempt at redemption."},
+  {"id":45,"coverUrl":"https://books.google.com/books/content?id=_kuOCgAAQBAJ&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":659,"publishYear":"2016","description":"The seductive and stunning #1 bestselling sequel to Sarah J. Maas’s spellbinding A Court of Thorns and Roses."},
+  {"id":46,"coverUrl":"https://books.google.com/books/content?id=B2OBEQAAQBAJ&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":406,"publishYear":"2026","description":"A dystopian novel by George Orwell centring on the consequences of totalitarianism, mass surveillance and repressive regimentation of people and behaviours within society."},
+  {"id":47,"coverUrl":"https://books.google.com/books/content?id=CGVDDwAAQBAJ&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":386,"publishYear":"2018","description":"The #1 New York Times bestselling worldwide sensation — a murder mystery, a coming-of-age narrative and a celebration of nature set in the marshes of North Carolina."},
+  {"id":48,"coverUrl":"https://books.google.com/books/content?id=UkY6zwEACAAJ&printsec=frontcover&img=1&zoom=3&source=gbs_api","pageCount":0,"publishYear":"2022","description":null},
+  {"id":49,"coverUrl":"https://books.google.com/books/content?id=g4REEQAAQBAJ&printsec=frontcover&img=1&zoom=3&source=gbs_api","pageCount":566,"publishYear":"2026","description":"City girl jaded with love + small-town, true romantic handyman = a reluctant love story that will turn this town upside down!"},
+  {"id":50,"coverUrl":"https://books.google.com/books/content?id=tJeBEQAAQBAJ&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":433,"publishYear":"2026","description":"Best friends have one week in paradise to fix their friendship or fall apart in this heart-stopping, utterly romantic new novel from the #1 New York Times bestselling author of Every Summer After."},
+  {"id":51,"coverUrl":"https://books.google.com/books/content?id=_5AJPUQEu6YC&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":466,"publishYear":"2010","description":"Detective D. D. Warren investigates as suspects two violent child survivors of family massacres who are institutionalized in the pediatric psychiatry ward of a Cambridge hospital."},
+  {"id":52,"coverUrl":"https://books.google.com/books/content?id=PDJBEQAAQBAJ&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":401,"publishYear":"2025","description":"#1 GLOBAL BESTSELLER • Meet Elizabeth Zott, a gifted research chemist in 1960s California whose career takes a detour when she becomes the unlikely star of a beloved TV cooking show."},
+  {"id":53,"coverUrl":"https://books.google.com/books/content?id=k3DWTWtEFuIC&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":419,"publishYear":"2002","description":"A poignant, funny, luminous novel about a mother and daughter — the complex ties that bind them, the past that separates them, and the healing that comes with forgiveness."},
+  {"id":54,"coverUrl":"https://books.google.com/books/content?id=yDEtnQEACAAJ&printsec=frontcover&img=1&zoom=3&source=gbs_api","pageCount":415,"publishYear":"1961","description":"A bombardier based in Italy during World War II repeatedly tries to avoid flying bombing missions while his colonel tries to get him killed. A microcosm of the 20th century world."},
+  {"id":55,"coverUrl":"https://books.google.com/books/content?id=_Up_EAAAQBAJ&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":242,"publishYear":"2022","description":"In Brave New World, Aldous Huxley constructs a dystopian future where society thrives on technological advancement, consumerism, and societal conditioning."},
+  {"id":56,"coverUrl":"https://books.google.com/books/content?id=d999Z2KbZJYC&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":321,"publishYear":"2002","description":"The author shares his insights into the craft of writing and offers a humorous perspective on his own experience as a writer."},
+  {"id":57,"coverUrl":"https://books.google.com/books/content?id=NT9TDQAAQBAJ&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":465,"publishYear":"2009","description":"A timeless and universal story about the lines we abide by, and the ones we don’t. Aibileen is a black maid in 1962 Jackson, Mississippi, who’s always taken orders quietly, but lately she’s unable to hold her bitterness back."},
+  {"id":58,"coverUrl":"https://books.google.com/books/content?id=AY_DQQAACAAJ&printsec=frontcover&img=1&zoom=3&source=gbs_api","pageCount":400,"publishYear":"2010","description":"After U.S. Marine Logan Thibault finds a photograph of a smiling young woman buried in the dirt during his tour of duty in Iraq, he experiences a sudden streak of luck and sets out across the country to find her."},
+  {"id":59,"coverUrl":"https://books.google.com/books/content?id=LY7rDwAAQBAJ&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":240,"publishYear":"2020","description":"Mary L. Trump, a trained clinical psychologist and Donald’s only niece, shines a bright light on the dark history of their family in order to explain how her uncle became the man who now threatens the world."},
+  {"id":60,"coverUrl":"https://books.google.com/books/content?id=CQ3c0QEACAAJ&printsec=frontcover&img=1&zoom=3&source=gbs_api","pageCount":0,"publishYear":"2026","description":"Hidden among the clutter of Heathrow Airport’s Lost and Found is a very special object — a violin of rare beauty and power that has fallen into the hands of three strangers."},
+  {"id":61,"coverUrl":"https://books.google.com/books/content?id=WMjHdhYI8F4C&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":927,"publishYear":"2009","description":"The novel follows the lives of the four March sisters, Meg, Jo, Beth and Amy, from childhood into maturity. The journey is not an easy one, and each is humbled by her encounters with love, society and death."},
+  {"id":62,"coverUrl":"https://books.google.com/books/content?id=PbXLEQAAQBAJ&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":479,"publishYear":"2026","description":"When the system fails, there’s one final option. Former Navy SEAL and CIA operative Chris Walker has lost faith in everything he once served. A blistering new thriller series."},
+  {"id":63,"coverUrl":"https://books.google.com/books/content?id=_AZ_AwAAQBAJ&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":544,"publishYear":"2014","description":"An imaginative and intricate novel inspired by the horrors of World War II, written in short, elegant chapters that explore human nature and the contradictory power of technology."},
+  {"id":64,"coverUrl":"https://books.google.com/books/content?id=PVcKEQAAQBAJ&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":190,"publishYear":"2024","description":"Twenty-five years after The Tipping Point, Malcolm Gladwell returns to reframe its lessons in a startling and revealing light."},
+  {"id":65,"coverUrl":"https://books.google.com/books/content?id=iFlAAQAAIAAJ&printsec=frontcover&img=1&zoom=3&source=gbs_api","pageCount":512,"publishYear":"2007","description":"Abducted as an 11-year-old child from her village in West Africa and forced to walk for months in a coffle of slaves, Aminata Diallo eventually forges her way to freedom."},
+  {"id":66,"coverUrl":"https://books.google.com/books/content?id=hGqr0AEACAAJ&printsec=frontcover&img=1&zoom=3&source=gbs_api","pageCount":0,"publishYear":"2023","description":"Charlie Reade is a regular high school kid who meets a dog named Radar and her aging master. When Bowditch dies, he leaves Charlie a cassette tape telling a story no one would believe."},
+  {"id":67,"coverUrl":"https://books.google.com/books/content?id=JsFMvgAACAAJ&printsec=frontcover&img=1&zoom=3&source=gbs_api","pageCount":480,"publishYear":"2017","description":"A Victorian epic transplanted to Japan, following a Korean family of immigrants through eight decades and four generations."},
+  {"id":68,"coverUrl":"https://books.google.com/books/content?id=sUG8AQAAQBAJ&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":225,"publishYear":"2012","description":"Mystery classic featuring the ghost of the famed Paris landmark — a gripping tale of human desire, fear, and violence."},
+  {"id":69,"coverUrl":"https://books.google.com/books/content?id=XcK37rn5pigC&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":449,"publishYear":"2009","description":"A teen-ager who was conceived so she could be a bone marrow transplant for her cancer-stricken older sister files a lawsuit against her family."},
+  {"id":70,"coverUrl":"https://books.google.com/books/content?id=bxlLDwAAQBAJ&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":368,"publishYear":"2017","description":"When Bree suddenly leaves her life in New York and moves to a small town in Maine, she hopes to finally find peace. On her first day she meets Archer Hale — a man who lives alone and fights his own demons."},
+  {"id":71,"coverUrl":"https://books.google.com/books/content?id=EJVJDwAAQBAJ&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":435,"publishYear":"2018","description":"Liam and Catherine come to the aid of an old friend and are drawn into a property dispute in Tuscany that unearths long-buried secrets."},
+  {"id":72,"coverUrl":"https://books.google.com/books/content?id=uVrABgAAQBAJ&printsec=frontcover&img=1&zoom=3&source=gbs_api","pageCount":433,"publishYear":"2015","description":"Told from the perspective of five-year-old Jack, Room is a world-changing story of a boundless love. Jack lives with his Ma in Room, which has a locked door and measures 11 feet by 11 feet."},
+  {"id":73,"coverUrl":"https://books.google.com/books/content?id=JT6FCgAAQBAJ&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":656,"publishYear":"2015","description":"Based on more than forty interviews with Jobs conducted over two years, Walter Isaacson has written a riveting story of the roller-coaster life and intense personality of a creative entrepreneur."},
+  {"id":74,"coverUrl":"https://books.google.com/books/content?id=iQGZAAAAQBAJ&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":335,"publishYear":"2012","description":"A reluctant centenarian much like Forrest Gump decides it’s not too late to start over. After a long and eventful life, Allan Karlsson ends up in a nursing home, believing it to be his last stop."},
+  {"id":75,"coverUrl":"https://books.google.com/books/content?id=q_lKb60zrJwC&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":242,"publishYear":"2011","description":"In this hilarious instant classic, the creator of The Mindy Project invites readers on a tour of her life and her unscientific observations on romance, friendship, and Hollywood."},
+  {"id":76,"coverUrl":"https://books.google.com/books/content?id=OkFxEQAAQBAJ&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":850,"publishYear":"2012","description":"A sweeping, thought-provoking journey through the defining moments and change-makers of human history."},
+  {"id":77,"coverUrl":"https://books.google.com/books/content?id=XUFmCwAAQBAJ&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":495,"publishYear":"2016","description":"A young white supremacist couple request their nurse be reassigned — they don’t want Ruth, who is Black, to touch their baby. The baby later goes into cardiac distress when Ruth is on duty."},
+  {"id":78,"coverUrl":"https://books.google.com/books/content?id=yjlYDgAAQBAJ&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":384,"publishYear":"2017","description":"A thrilling novel from Lisa See that explores the lives of a Chinese mother and her daughter who has been adopted by an American couple."},
+  {"id":79,"coverUrl":"https://books.google.com/books/content?id=ZTYKDAAAQBAJ&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":362,"publishYear":"2016","description":"A single father discovers the true nature of unconditional love after his world is turned upside down. At 32, Russell Green has it all: a stunning wife, a lovable daughter, a successful career."},
+  {"id":80,"coverUrl":"https://books.google.com/books/content?id=1W8-c_m-noEC&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":300,"publishYear":"2011","description":"The Pulitzer Prize and National Book Award-winning novel. Celie has grown up poor in rural Georgia, despised by the society around her and abused by her own family."},
+  {"id":81,"coverUrl":"https://books.google.com/books/content?id=EopEEQAAQBAJ&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":649,"publishYear":"2025","description":"How does the greatest writer of our time tell her own story? Raised by scientifically minded parents, Margaret Atwood spent most of each year in the wild forests of northern Quebec."},
+  {"id":82,"coverUrl":"https://books.google.com/books/content?id=1qJ7DwAAQBAJ&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":414,"publishYear":"2019","description":"WINNER OF THE BOOKER PRIZE • More than fifteen years after The Handmaid’s Tale, the theocratic regime of the Republic of Gilead maintains its grip on power, but there are signs it is beginning to rot from within."},
+  {"id":83,"coverUrl":"https://books.google.com/books/content?id=t-OKDwAAQBAJ&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":448,"publishYear":"2019","description":"A dazzling and profound novel about a small town with a big dream — and the price required to make it come true. People say Beartown is finished. But down by the lake stands an old ice rink."},
+  {"id":84,"coverUrl":"https://books.google.com/books/content?id=gAD4EAAAQBAJ&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":204,"publishYear":"2024","description":"Ten strangers summoned to a private island. Their host is nowhere to be found. For each has been marked for murder."},
+  {"id":85,"coverUrl":"https://books.google.com/books/content?id=t3crEAAAQBAJ&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":416,"publishYear":"2021","description":"As a graduate student in 1942, Eva was forced to flee Paris after the arrest of her father. Finding refuge in a small mountain town, she begins forging identity documents for Jewish children fleeing to Switzerland."},
+  {"id":86,"coverUrl":"https://books.google.com/books/content?id=gXk5wYNESPsC&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":884,"publishYear":"1998","description":"A heartbreaking and poignant multigenerational saga of the reproductive bonds of destruction and the powerful force of forgiveness."},
+  {"id":87,"coverUrl":"https://books.google.com/books/content?id=UhQ4AwAAQBAJ&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":481,"publishYear":"2014","description":"About the dangerous little lies we tell ourselves just to survive. A murder… A tragic accident… Or just parents behaving badly? What’s indisputable is that someone is dead."},
+  {"id":88,"coverUrl":"https://books.google.com/books/content?id=kW7y0QEACAAJ&printsec=frontcover&img=1&zoom=3&source=gbs_api","pageCount":0,"publishYear":"2026","description":null},
+  {"id":89,"coverUrl":"https://books.google.com/books/content?id=szMU9omwV0wC&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":370,"publishYear":"2012","description":"WINNER OF THE ORANGE PRIZE FOR FICTION 2012 • Patroclus, an awkward young prince, has been exiled to the court of King Peleus and his perfect son Achilles. Their bond blossoms into something deeper."},
+  {"id":90,"coverUrl":"https://books.google.com/books/content?id=N0qL0QEACAAJ&printsec=frontcover&img=1&zoom=3&source=gbs_api","pageCount":0,"publishYear":"2026","description":"#1 New York Times bestselling author Rainbow Rowell returns with a breathtakingly honest novel about how imperfectly we fall in love."},
+  {"id":91,"coverUrl":"https://books.google.com/books/content?id=WDljAAAAMAAJ&printsec=frontcover&img=1&zoom=3&source=gbs_api","pageCount":392,"publishYear":"1991","description":null},
+  {"id":92,"coverUrl":"https://books.google.com/books/content?id=exhjEQAAQBAJ&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":221,"publishYear":"2026","description":"After the unexpected death of their mother, Felicia’s five daughters are summoned to a historic Connecticut farmhouse for the reading of her will — and revelations that will change their lives."},
+  {"id":93,"coverUrl":"https://books.google.com/books/content?id=BTMknk-qvacC&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":371,"publishYear":"2007","description":"A triumphant tale of a young woman and her difficult childhood. Jeannette Walls was the second of four children raised by anti-institutional parents in a household of extremes."},
+  {"id":94,"coverUrl":"https://books.google.com/books/content?id=OdVrDwAAQBAJ&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":333,"publishYear":"2019","description":"Inspired by true stories, The Woman in the White Kimono illuminates a searing portrait of one woman torn between her culture and her heart. Japan, 1957."},
+  {"id":95,"coverUrl":"https://books.google.com/books/content?id=AvmUDwAAQBAJ&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":382,"publishYear":"2020","description":"A REESE WITHERSPOON x HELLO SUNSHINE BOOK CLUB PICK • Vivid and compelling in its portrait of one woman’s struggle for fulfillment in a society pivoting between the traditional and the modern."},
+  {"id":96,"coverUrl":"https://books.google.com/books/content?id=2pl0YOznbxcC&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":880,"publishYear":"2011","description":"On November 22, 1963, three shots rang out in Dallas, President Kennedy died, and the world changed. What if you could go back and stop it?"},
+  {"id":97,"coverUrl":"https://books.google.com/books/content?id=FNn5DQAAQBAJ&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":560,"publishYear":"2017","description":"A horror story of a children’s pet cemetery and another graveyard behind it from which the dead return."},
+  {"id":98,"coverUrl":"https://books.google.com/books/content?id=av7yEAAAQBAJ&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":327,"publishYear":"2024","description":"Val Murray has mislaid her most precious mementoes of the people she’s loved and lost. Can her family, technology, and a little divine intervention somehow mend her shattered heart?"},
+  {"id":99,"coverUrl":"https://books.google.com/books/content?id=GDRKDwAAQBAJ&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":401,"publishYear":"2018","description":"Sold on a Monday is the unforgettable book-club phenomenon, inspired by a stunning piece of Depression-era history. 2 CHILDREN FOR SALE. The sign is a last resort."},
+  {"id":100,"coverUrl":"https://books.google.com/books/content?id=I77PrqhZegYC&printsec=frontcover&img=1&zoom=3&source=gbs_api","pageCount":432,"publishYear":"2009","description":"No one knows about the early life of the Son of God, the missing years — except Biff, the Messiah’s best bud, who has been resurrected to tell the story in this divinely hilarious, heartfelt work."},
+  {"id":101,"coverUrl":"https://books.google.com/books/content?id=LyqFzQEACAAJ&printsec=frontcover&img=1&zoom=3&source=gbs_api","pageCount":372,"publishYear":"2021","description":"1938: Two giraffes miraculously survive a hurricane while crossing the Atlantic. What follows is a twelve-day road trip in a custom truck to deliver Southern California’s first giraffes to the San Diego Zoo."},
+  {"id":102,"coverUrl":"https://books.google.com/books/content?id=RyiIEAAAQBAJ&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":161,"publishYear":"2003","description":"Wise, funny, and heartbreaking, Persepolis is Marjane Satrapi’s acclaimed graphic memoir of growing up in Iran during the Islamic Revolution."},
+  {"id":103,"coverUrl":"https://books.google.com/books/content?id=Oe29EAAAQBAJ&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":368,"publishYear":"2023","description":"An immersive historical novel inspired by the true story of a woman physician in 15th-century China — perfect for fans of Lisa See’s classics Snow Flower and the Secret Fan."},
+  {"id":104,"coverUrl":"https://books.google.com/books/content?id=3jLNHH9RFGEC&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":257,"publishYear":"2013","description":"A boy’s bittersweet passage to maturity and sexual awakening is set against escalating political tensions in Sri Lanka during the seven years leading up to the 1983 riots."},
+  {"id":105,"coverUrl":"https://books.google.com/books/content?id=cRPKOzWlOfUC&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":385,"publishYear":"2011","description":"An instant classic and eerily prescient cultural phenomenon. This is the story of Offred, one of the unfortunate Handmaids under the new social order who have only one purpose: to breed."},
+  {"id":106,"coverUrl":"https://books.google.com/books/content?id=V_eVDwAAQBAJ&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":496,"publishYear":"2019","description":"After everything that the citizens of Beartown have gone through, they are struck yet another blow when they hear that their beloved local junior hockey team will soon be disbanded."},
+  {"id":107,"coverUrl":"https://books.google.com/books/content?id=p37XCQAAQBAJ&printsec=frontcover&img=1&zoom=3&edge=curl&source=gbs_api","pageCount":384,"publishYear":"2015","description":"A charming, warmhearted novel about a young girl whose grandmother dies and leaves behind a series of letters, sending her on a journey that brings to life the world of her grandmother’s fairy tales."}
+];
+function getBookMeta(id) {
+  return BOOK_DATA.find(d => d.id === id) || { coverUrl: null, pageCount: 0, publishYear: null, description: null };
+}
 const RAW = [
   {id:1,title:'The Good Earth',author:'Pearl S. Buck',genre:'Historical Fiction'},
   {id:2,title:'Memoirs of a Geisha',author:'Arthur Golden',genre:'Historical Fiction'},
@@ -467,8 +578,6 @@ const RAW = [
 // ── STATE ─────────────────────────────────────────────────────────────────────
 const db = {
   books:      [],
-  covers:     {},
-  authorImgs: {},
   shelfOrder: null,
   nextPick:   null,
   shelfOpen:  false,
@@ -478,27 +587,6 @@ let currentUid  = null;
 let currentPage = 'home';
 let appVisible  = false;
 let unsubBooks  = null;
-
-// ── COVER LAZY LOAD ───────────────────────────────────────────────────────────
-const coverObserver = typeof IntersectionObserver !== 'undefined'
-  ? new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (!entry.isIntersecting) return;
-        coverObserver.unobserve(entry.target);
-        const fn = entry.target._onVisible;
-        if (fn) { entry.target._onVisible = null; fn(); }
-      });
-    }, { rootMargin: '80px' })
-  : null;
-
-const fetchQueue = [];
-let fetchBusy = false;
-function enqueue(fn) { fetchQueue.push(fn); if (!fetchBusy) pumpQueue(); }
-function pumpQueue() {
-  if (!fetchQueue.length) { fetchBusy = false; return; }
-  fetchBusy = true;
-  fetchQueue.shift()().then(() => setTimeout(pumpQueue, 120), () => setTimeout(pumpQueue, 120));
-}
 
 // ── DOM HELPERS ───────────────────────────────────────────────────────────────
 const byId = id => document.getElementById(id);
@@ -624,18 +712,6 @@ function setupBooksListener() {
   }, () => toast('Lost connection to your library. Try refreshing.'));
 }
 
-// ── COVERS — localStorage cache ───────────────────────────────────────────────
-function loadCovers() {
-  try {
-    const saved = localStorage.getItem(COVERS_KEY);
-    if (saved) db.covers = JSON.parse(saved);
-  } catch (e) {}
-}
-
-function saveCovers() {
-  try { localStorage.setItem(COVERS_KEY, JSON.stringify(db.covers)); } catch (e) {}
-}
-
 // ── SEEDED PRNG ───────────────────────────────────────────────────────────────
 function mkRand(seed) {
   let s = seed >>> 0;
@@ -665,45 +741,6 @@ function darken(hex, f) {
   return `rgb(${Math.round(r*(1-f))},${Math.round(g*(1-f))},${Math.round(b*(1-f))})`;
 }
 
-// ── GOOGLE BOOKS API ──────────────────────────────────────────────────────────
-function fetchBook(book) {
-  if (db.covers[book.id]) return Promise.resolve(db.covers[book.id]);
-  const last = book.author.split(' and ')[0].split(' ').pop();
-  const q    = encodeURIComponent(`intitle:${book.title} inauthor:${last}`);
-  return fetch(`https://www.googleapis.com/books/v1/volumes?q=${q}&maxResults=1&fields=items(volumeInfo/imageLinks,volumeInfo/pageCount)`)
-    .then(r => r.json())
-    .then(d => {
-      const result = { url: null, pageCount: 0 };
-      if (d.items?.[0]) {
-        const info  = d.items[0].volumeInfo || {};
-        const links = info.imageLinks || {};
-        const t     = links.thumbnail || links.smallThumbnail || null;
-        if (t) result.url = t.replace('http://', 'https://').replace('zoom=1', 'zoom=2');
-        result.pageCount = info.pageCount || 0;
-      }
-      db.covers[book.id] = result;
-      saveCovers();
-      if (result.pageCount && !book.pageCount) fsUpdate(book.id, { pageCount: result.pageCount });
-      return result;
-    })
-    .catch(() => { const r = { url: null, pageCount: 0 }; db.covers[book.id] = r; return r; });
-}
-
-function fetchAuthor(name) {
-  if (name in db.authorImgs) return Promise.resolve(db.authorImgs[name]);
-  const q = encodeURIComponent(name.split(' and ')[0].trim());
-  return fetch(`https://openlibrary.org/search/authors.json?q=${q}&limit=1`)
-    .then(r => r.json())
-    .then(d => {
-      const url = d.docs?.[0]?.key
-        ? `https://covers.openlibrary.org/a/olid/${d.docs[0].key.replace('/authors/', '')}-M.jpg`
-        : null;
-      db.authorImgs[name] = url;
-      return url;
-    })
-    .catch(() => { db.authorImgs[name] = null; return null; });
-}
-
 // ── COVER ELEMENT ─────────────────────────────────────────────────────────────
 function coverEl(book, w, h) {
   const wrap = make('div', { cls: 'cover-el', style: `width:${w}px;height:${h}px` });
@@ -724,18 +761,8 @@ function coverEl(book, w, h) {
     return ph;
   }
 
-  const cached = db.covers[book.id];
-  if (cached) {
-    if (cached.url) showImg(cached.url); else wrap.appendChild(showPh());
-  } else {
-    wrap.appendChild(showPh());
-    if (coverObserver) {
-      wrap._onVisible = () => enqueue(() => fetchBook(book).then(data => { if (data.url && wrap.isConnected) showImg(data.url); }));
-      coverObserver.observe(wrap);
-    } else {
-      fetchBook(book).then(data => { if (data.url && wrap.isConnected) showImg(data.url); });
-    }
-  }
+  const meta = getBookMeta(book.id);
+  if (meta.coverUrl) showImg(meta.coverUrl); else wrap.appendChild(showPh());
   return wrap;
 }
 
@@ -796,13 +823,8 @@ function renderCR() {
       card.insertBefore(img, card.firstChild);
     }
 
-    const cached = db.covers[b.id];
-    if (cached) {
-      if (cached.url) applyBg(cached.url); else card.style.background = COLORS[b.id % COLORS.length];
-    } else {
-      card.style.background = COLORS[b.id % COLORS.length];
-      fetchBook(b).then(data => { if (data.url && card.isConnected) applyBg(data.url); });
-    }
+    const meta = getBookMeta(b.id);
+    if (meta.coverUrl) applyBg(meta.coverUrl); else card.style.background = COLORS[b.id % COLORS.length];
     byId('cr-wrap').appendChild(card);
   });
 }
@@ -894,7 +916,7 @@ function renderReceipts() {
     return;
   }
 
-  const pages    = readBooks.reduce((s, b) => s + (b.pageCount > 0 ? b.pageCount : 300), 0);
+  const pages    = readBooks.reduce((s, b) => { const p = getBookMeta(b.id).pageCount || b.pageCount; return s + (p > 0 ? p : 300); }, 0);
   const hours    = Math.round(pages / 250);
   const thisYear = String(new Date().getFullYear());
   const yearRead = readBooks.filter(b => b.dateRead?.slice(0,4) === thisYear).length;
@@ -911,9 +933,6 @@ function renderReceipts() {
   grid.appendChild(item(`${months}mo`,           'To finish your library'));
   el.appendChild(grid);
 
-  readBooks.forEach(b => {
-    if (!b.pageCount) fetchBook(b).then(d => { if (d.pageCount) renderReceipts(); });
-  });
 }
 
 function renderNextRead() {
@@ -1077,13 +1096,8 @@ function bookCard(b) {
     inner.appendChild(textLayer);
   }
 
-  const cached = db.covers[b.id];
-  if (cached) {
-    if (cached.url) applyImg(cached.url); else applyPh();
-  } else {
-    applyPh();
-    enqueue(() => fetchBook(b).then(d => { if (d.url && inner.isConnected) applyImg(d.url); }));
-  }
+  const meta = getBookMeta(b.id);
+  if (meta.coverUrl) applyImg(meta.coverUrl); else applyPh();
 
   card.appendChild(inner);
   return card;
@@ -1123,13 +1137,6 @@ function renderAuthors() {
     const row = make('div', { cls: 'author-row' });
     on(row, 'click', () => openAuthorModal(name));
     const av = make('div', { cls: 'author-avatar', text: ini });
-    fetchAuthor(name).then(url => {
-      if (url && av.isConnected) {
-        const img = make('img'); img.src = url; img.alt = name;
-        img.onerror = () => { av.textContent = ini; };
-        av.innerHTML = ''; av.appendChild(img);
-      }
-    });
     const info = make('div', { style: 'flex:1;min-width:0' });
     info.appendChild(make('div', { style: 'font-size:13px;font-weight:500', text: name }));
     info.appendChild(make('div', { style: 'font-size:11px;color:var(--text3);margin-top:2px',
@@ -1151,14 +1158,20 @@ function openBookModal(id) {
   on(cb, 'click', closeBookModal);
   hdr.appendChild(cb); inner.appendChild(hdr);
 
+  const bmeta = getBookMeta(b.id);
   const top  = make('div', { style: 'display:flex;gap:16px;margin-bottom:18px' });
   top.appendChild(coverEl(b, 80, 115));
   const info = make('div', { style: 'flex:1;min-width:0' });
   info.appendChild(make('div', { style: 'font-size:16px;font-weight:600;line-height:1.3;margin-bottom:5px', text: b.title }));
   info.appendChild(make('div', { style: 'font-size:13px;color:var(--text2);margin-bottom:10px', text: b.author }));
   info.appendChild(make('span', { cls: 'tag', text: b.genre }));
-  if (b.pageCount) info.appendChild(make('div', { style: 'font-size:11px;color:var(--text3);margin-top:6px', text: `${b.pageCount} pages` }));
+  const metaParts = [bmeta.pageCount ? `${bmeta.pageCount} pages` : null, bmeta.publishYear || null].filter(Boolean);
+  if (metaParts.length) info.appendChild(make('div', { style: 'font-size:11px;color:var(--text3);margin-top:6px', text: metaParts.join(' · ') }));
   top.appendChild(info); inner.appendChild(top);
+  if (bmeta.description) {
+    inner.appendChild(make('div', { cls: 'sec-label', style: 'margin-top:0;display:block', text: 'About' }));
+    inner.appendChild(make('div', { style: 'font-size:12px;color:var(--text2);line-height:1.6;margin-bottom:16px', text: bmeta.description }));
+  }
 
   inner.appendChild(make('div', { cls: 'sec-label', style: 'margin-top:0;display:block', text: 'Your rating' }));
   const stars = make('div', { cls: 'stars' });
@@ -1222,13 +1235,6 @@ function openAuthorModal(name) {
   const hdr = make('div', { style: 'display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px' });
   const nb  = make('div', { style: 'display:flex;align-items:center;gap:12px' });
   const av  = make('div', { cls: 'author-avatar', style: 'width:52px;height:52px;font-size:16px', text: ini });
-  fetchAuthor(name).then(url => {
-    if (url && av.isConnected) {
-      const img = make('img'); img.src = url; img.alt = name;
-      img.onerror = () => { av.textContent = ini; };
-      av.innerHTML = ''; av.appendChild(img);
-    }
-  });
   const ni = make('div');
   ni.appendChild(make('div', { style: 'font-size:17px;font-weight:600', text: name }));
   ni.appendChild(make('div', { style: 'font-size:12px;color:var(--text3);margin-top:2px', text: `${ab.length} books in your library` }));
@@ -1283,7 +1289,6 @@ function initAddBook() {
 }
 
 // ── BOOT ──────────────────────────────────────────────────────────────────────
-loadCovers();
 initNav();
 initLibrary();
 initAddBook();
